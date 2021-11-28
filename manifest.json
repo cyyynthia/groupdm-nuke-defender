@@ -1,0 +1,7 @@
+{
+  "name": "Group DM Nuke Defender",
+  "version": "1.0.0",
+  "description": "Defends your account against the recent \"Group DM Nuke\" attack by actively blocking userbots adding you in many groups rapidly.",
+  "author": "Cynthia",
+  "license": "BSD-3-Clause"
+}
