@@ -70,18 +70,19 @@ class GroupDmNukeDefender extends Plugin {
       addedSet.add(channelId)
 
       if (addedSet.size === 5) { // Strict equal, so if there are more groups we get added to we don't do it multiple times
+        open(() => React.createElement(ThreatModal, { user: `${username}#${discriminator}`, onClose: () => close() }))
         RelationshipManager.addRelationship(id, { location: 'ContextMenu' }, RelationshipTypes.BLOCKED)
-        open(() => React.createElement(ThreatModal, { user: `${username}#${discriminator}`, onClose: close }))
+          .then(() => {
+            // Leave groups
+            const channelIds = Array.from(addedSet)
+            for (let i = 0; i < addedSet.size; i++) {
+              const spamChannelId = channelIds[i]
+              setTimeout(() => void PrivateChannelsManager.closePrivateChannel(spamChannelId), 1e3 + (1500 * i))
+            }
 
-        // Leave groups
-        const channelIds = Array.from(addedSet)
-        for (let i = 0; i < addedSet.size; i++) {
-          const spamChannelId = channelIds[i]
-          setTimeout(() => void PrivateChannelsManager.closePrivateChannel(spamChannelId), 1e3 + (1500 * i))
-        }
-
-        // This is no longer necessary
-        this.recentAdds.delete(id)
+            // This is no longer necessary
+            this.recentAdds.delete(id)
+          })
       }
 
       // Expire after 30 seconds
