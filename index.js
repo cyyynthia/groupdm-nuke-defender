@@ -44,6 +44,7 @@ class GroupDmNukeDefender extends Plugin {
   }
 
   startPlugin () {
+    open(() => React.createElement(ThreatModal, { user: 'haxxor#1337', onClose: () => close() }))
     FluxDispatcher.subscribe('CHANNEL_CREATE', this.handleChannelCreate)
     FluxDispatcher.subscribe('MESSAGE_CREATE', this.handleMessageCreate)
   }
@@ -74,9 +75,7 @@ class GroupDmNukeDefender extends Plugin {
         RelationshipManager.addRelationship(id, { location: 'ContextMenu' }, RelationshipTypes.BLOCKED)
           .then(() => {
             // Leave groups
-            const channelIds = Array.from(addedSet)
-            for (let i = 0; i < addedSet.size; i++) {
-              const spamChannelId = channelIds[i]
+            for (const spamChannelId of Array.from(addedSet)) {
               setTimeout(() => void PrivateChannelsManager.closePrivateChannel(spamChannelId), 1e3 + (1500 * i))
             }
 
