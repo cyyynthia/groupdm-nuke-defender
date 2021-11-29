@@ -44,7 +44,6 @@ class GroupDmNukeDefender extends Plugin {
   }
 
   startPlugin () {
-    open(() => React.createElement(ThreatModal, { user: 'haxxor#1337', onClose: () => close() }))
     FluxDispatcher.subscribe('CHANNEL_CREATE', this.handleChannelCreate)
     FluxDispatcher.subscribe('MESSAGE_CREATE', this.handleMessageCreate)
   }
