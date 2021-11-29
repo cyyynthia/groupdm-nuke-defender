@@ -74,8 +74,9 @@ class GroupDmNukeDefender extends Plugin {
         RelationshipManager.addRelationship(id, { location: 'ContextMenu' }, RelationshipTypes.BLOCKED)
           .then(() => {
             // Leave groups
-            for (const spamChannelId of Array.from(addedSet)) {
-              setTimeout(() => void PrivateChannelsManager.closePrivateChannel(spamChannelId), 1e3 + (1500 * i))
+            const array = Array.from(addedSet)
+            for (let i = 0; i < array.length; i++) {
+              setTimeout(() => void PrivateChannelsManager.closePrivateChannel(array[i]), 1e3 + (1500 * i))
             }
 
             // This is no longer necessary
