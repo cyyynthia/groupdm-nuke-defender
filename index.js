@@ -69,7 +69,7 @@ class GroupDmNukeDefender extends Plugin {
       const addedSet = this.recentAdds.get(id)
       addedSet.add(channelId)
 
-      if (addedSet.size === 5) { // Strict equal, so if there are more groups we get added to we don't do it multiple times
+      if (addedSet.size === 1) { // Strict equal, so if there are more groups we get added to we don't do it multiple times
         open(() => React.createElement(ThreatModal, { user: `${username}#${discriminator}`, onClose: () => close() }))
         RelationshipManager.addRelationship(id, { location: 'ContextMenu' }, RelationshipTypes.BLOCKED)
           .then(() => {

@@ -43,7 +43,6 @@ module.exports = AsyncComponent.from((async () => {
   const BlockedDomainModal = await getModuleByDisplayName('BlockedDomainModal')
   return React.memo(
     ({ user }) => {
-      console.log('ok')
       const vdom = BlockedDomainModal({ domain: '', transitionState: 1 })
       vdom.props.children[1].props.children.props.children[0].props.children = 'Threat Mitigated'
       vdom.props.children[1].props.children.props.children[1].props.children = [ 'Userbot ', user, ' attempted to mass-add you to group DMs to clutter your Discord with hundreds of pings and spam groups in your DM list. The user has been blocked to stop the attack, and groups have been left. Stay safe, fren!' ]
