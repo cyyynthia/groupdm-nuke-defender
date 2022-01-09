@@ -25,17 +25,29 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-const { React, getModuleByDisplayName } = require('powercord/webpack')
+const { React, getModule, getModuleByDisplayName, modal } = require('powercord/webpack')
+const { AsyncComponent } = require('powercord/components')
+const { sleep } = require('powercord/util')
 
-const BlockedDomainModal = getModuleByDisplayName('BlockedDomainModal', false)
+module.exports = AsyncComponent.from((async () => {
+  await sleep(1e3)
 
-const ThreatModal = React.memo(
-  ({ user }) => {
-    const vdom = BlockedDomainModal({ domain: '', transitionState: 1 })
-    vdom.props.children[1].props.children.props.children[0].props.children = 'Threat Mitigated'
-    vdom.props.children[1].props.children.props.children[1].props.children = [ 'Userbot ', user, ' attempted to mass-add you to group DMs to clutter your Discord with hundreds of pings and spam groups in your DM list. The user has been blocked to stop the attack, and groups have been left. Stay safe, fren!' ]
-    return vdom
-  }
-)
+  const opener = await getModule((m) => m.show?.toString().includes('openModalLazy'))
+  let promise;
+  const ogOpenLazy = modal.openModalLazy;
+  modal.openModalLazy = (a) => promise = a();
+  await opener.show()
+  modal.openModalLazy = ogOpenLazy;
+  await promise;
 
-module.exports = ThreatModal
+  const BlockedDomainModal = await getModuleByDisplayName('BlockedDomainModal')
+  return React.memo(
+    ({ user }) => {
+      console.log('ok')
+      const vdom = BlockedDomainModal({ domain: '', transitionState: 1 })
+      vdom.props.children[1].props.children.props.children[0].props.children = 'Threat Mitigated'
+      vdom.props.children[1].props.children.props.children[1].props.children = [ 'Userbot ', user, ' attempted to mass-add you to group DMs to clutter your Discord with hundreds of pings and spam groups in your DM list. The user has been blocked to stop the attack, and groups have been left. Stay safe, fren!' ]
+      return vdom
+    }
+  )
+})())
